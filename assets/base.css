@@ -1,0 +1,227 @@
+:root {
+  --green: #cbdfbd;
+  --blue: #5d9cc6;
+  --black: #212426;
+  --gray: #a9aab1;
+  --beige: #fdf5e6;
+  --current-week: #ff6b6b; /* New vibrant color for current week */
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
+::selection {
+  background-color: #cbc1a8;
+}
+
+html {
+  box-sizing: border-box;
+  font-size: 62.5%; /* scaling down so that 1rem equals to 10px */
+}
+
+body {
+  background-color: var(--beige);
+  color: var(--black);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji';
+  font-size: 1.8rem;
+  font-weight: 400;
+  line-height: 1.6;
+  margin: 0 auto;
+  max-width: 135rem;
+  width: 95%;
+}
+
+a {
+  color: #ad3446;
+}
+
+a:active,
+a:focus,
+a:hover {
+  color: #7e2633;
+}
+
+h1 {
+  font-size: 5.2rem;
+  line-height: 1.5;
+  font-weight: 800;
+  letter-spacing: -.025em;
+}
+
+h2 {
+  font-weight: 800;
+  letter-spacing: -.025em;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: auto repeat(52, 1fr);
+  grid-template-rows: auto repeat(90, 1fr);
+  grid-column-gap: 2px;
+  grid-row-gap: 2px;
+  width: 100%;
+  max-width: 1060px;
+  margin: 1rem auto;
+  position: relative;
+}
+
+.grid-item {
+  border: .15rem solid var(--gray);
+  border-radius: 0.2rem;
+  margin: 0;
+  height: 1rem;
+  width: 1rem;
+  transition: background-color .5s ease-in;
+}
+
+.grid-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.8rem;
+  color: var(--black);
+  font-weight: bold;
+}
+
+.col-header {
+  transform: rotate(-90deg);
+  height: 2rem;
+  width: 1rem;
+}
+
+.row-header {
+  padding-right: 0.5rem;
+  text-align: right;
+  height: 1rem;
+}
+
+.corner-header {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.year-input {
+  margin: 1.5rem 0;
+}
+
+.year-input input {
+  padding: 0.5rem;
+  font-size: 1.6rem;
+  margin-right: 0.5rem;
+}
+
+.year-input button {
+  padding: 0.5rem 1rem;
+  font-size: 1.6rem;
+  background-color: var(--blue);
+  color: white;
+  border: none;
+  border-radius: 0.3rem;
+  cursor: pointer;
+}
+
+.year-input button:hover {
+  background-color: #4a7da0;
+}
+
+.current-week {
+  background-color: var(--current-week) !important;
+  border: .15rem solid #d63636;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+.print-btn {
+  background: none;
+  border: none;
+  color: #ad3446;
+  cursor: pointer;
+  font-size: 1.8rem;
+  font-family: inherit;
+  padding: 0;
+  text-decoration: underline;
+}
+
+.print-btn:active,
+.print-btn:focus,
+.print-btn:hover {
+  color: #7e2633;
+}
+
+/* Print styles */
+@media print {
+  body {
+    background-color: white;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .text-container, .print-header {
+    display: none !important;
+  }
+  
+  .grid-container {
+    max-width: 100%;
+    margin: 0;
+    padding: 0;
+    page-break-inside: avoid;
+    width: 100vw;
+    height: 100vh;
+    transform-origin: top left;
+    transform: scale(0.9);
+  }
+  
+  /* Ensure the grid is small enough to fit on one page */
+  .grid-item {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+    height: 0.8rem;
+    width: 0.8rem;
+  }
+  
+  .grid-header {
+    font-size: 0.6rem;
+  }
+  
+  /* Force page size */
+  @page {
+    size: landscape;
+    margin: 0;
+  }
+}
+
+/* homegrown functional CSS framework */
+
+.w-full { width: 100%; }
+
+.flex { display: flex !important; }
+.flex-wrap { flex-wrap: wrap-reverse; }
+
+div.flex-wrap { flex-wrap: nowrap; }
+
+.items-center { align-items: center !important; }
+.justify-around { justify-content: space-around !important; }
+
+.bg-time-passed { background-color: var(--green) !important; }
+
+.text-center { text-align: center; }
+
+.text-black { color: var(--black); }
+
+.mb-0 { margin: 0 !important; }
+.m-1 { margin: 1rem !important; }
+.mt-1 { margin-top: 1rem !important; }
+
+.p-1 { padding: 1rem; }
+.p-2 { padding: 2rem; }
+
+.border-b-3 { border-bottom: 0.3rem solid !important; }
