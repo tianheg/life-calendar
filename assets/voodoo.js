@@ -120,8 +120,6 @@ const setFullScreen = () => {
 
 // Handle PDF printing
 const handlePrint = () => {
-  // No titles or headers for the PDF - just the grid
-  
   // Store the current animation state of the current week
   const currentWeekElement = document.querySelector('.current-week');
   let animationState = null;
@@ -133,15 +131,41 @@ const handlePrint = () => {
     currentWeekElement.style.animation = 'none';
   }
   
-  // Trigger the print dialog
-  window.print();
-  
-  // Restore animation after printing
-  if (currentWeekElement && animationState !== null) {
-    setTimeout(() => {
-      currentWeekElement.style.animation = animationState;
-    }, 100);
+  // Force grid container to be visible and properly sized before printing
+  const gridContainer = document.querySelector('.grid-container');
+  if (gridContainer) {
+    // Ensure grid is visible with !important styles
+    gridContainer.setAttribute('style', 'display: grid !important; visibility: visible !important; width: 100% !important;');
+    
+    // Ensure all grid items are visible
+    const gridItems = document.querySelectorAll('.grid-container .grid-item, .grid-container .grid-header');
+    gridItems.forEach(item => {
+      item.setAttribute('style', item.getAttribute('style') || '' + '; visibility: visible !important; display: block !important;');
+    });
   }
+  
+  // Add a slight delay before printing to ensure styles are applied
+  setTimeout(() => {
+    window.print();
+    
+    // Restore animation after printing
+    if (currentWeekElement && animationState !== null) {
+      currentWeekElement.style.animation = animationState;
+    }
+    
+    // Restore grid container styles
+    if (gridContainer) {
+      gridContainer.removeAttribute('style');
+      
+      // Restore grid items
+      const gridItems = document.querySelectorAll('.grid-container .grid-item, .grid-container .grid-header');
+      gridItems.forEach(item => {
+        // Only remove the visibility and display styles we added
+        const style = item.getAttribute('style') || '';
+        item.setAttribute('style', style.replace(/visibility:[^;]+!important;?|display:[^;]+!important;?/g, ''));
+      });
+    }
+  }, 100);
 };
 
 // Initialize calendar with default value or stored value

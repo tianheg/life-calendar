@@ -156,48 +156,6 @@ h2 {
   color: #7e2633;
 }
 
-/* Print styles */
-@media print {
-  body {
-    background-color: white;
-    width: 100%;
-    margin: 0;
-    padding: 0;
-  }
-  
-  .text-container, .print-header {
-    display: none !important;
-  }
-  
-  .grid-container {
-    max-width: 100%;
-    margin: 0;
-    padding: 0;
-    page-break-inside: avoid;
-    width: 100vw;
-    height: 100vh;
-    transform-origin: top left;
-    transform: scale(0.9);
-  }
-  
-  /* Ensure the grid is small enough to fit on one page */
-  .grid-item {
-    print-color-adjust: exact;
-    -webkit-print-color-adjust: exact;
-    height: 0.8rem;
-    width: 0.8rem;
-  }
-  
-  .grid-header {
-    font-size: 0.6rem;
-  }
-  
-  /* Force page size */
-  @page {
-    size: landscape;
-    margin: 0;
-  }
-}
 
 /* homegrown functional CSS framework */
 
@@ -225,3 +183,63 @@ div.flex-wrap { flex-wrap: nowrap; }
 .p-2 { padding: 2rem; }
 
 .border-b-3 { border-bottom: 0.3rem solid !important; }
+
+/* Print styles */
+@media print {
+  body {
+    background-color: white !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+    max-width: none !important;
+  }
+  
+  /* Hide only specific elements */
+  .text-container,
+  button,
+  a {
+    display: none !important;
+  }
+  
+  /* Ensure grid-container is visible and properly sized */
+  .grid-container {
+    display: grid !important; /* Force display */
+    margin: 0 auto !important;
+    width: 100% !important;
+    height: auto !important;
+    page-break-inside: avoid !important;
+    position: relative !important;
+    visibility: visible !important;
+    overflow: visible !important;
+  }
+  
+  /* Ensure grid items are visible */
+  .grid-item, 
+  .grid-header {
+    print-color-adjust: exact !important;
+    -webkit-print-color-adjust: exact !important;
+    visibility: visible !important;
+    display: block !important;
+  }
+  
+  /* Ensure proper colors for the time passed cells */
+  .bg-time-passed {
+    background-color: var(--green) !important;
+    border-color: var(--gray) !important;
+  }
+  
+  /* Ensure current week appears properly in print */
+  .current-week {
+    background-color: var(--current-week) !important;
+    border-color: #d63636 !important;
+    animation: none !important;
+  }
+  
+  /* Main element needs to be displayed */
+  main {
+    display: block !important;
+    width: 100% !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+}
