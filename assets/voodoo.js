@@ -13,6 +13,7 @@ const createGrid = () => {
   for (let j = 0; j < 52; j++) {
     const colHeader = document.createElement('div');
     colHeader.classList.add('grid-header', 'col-header');
+    colHeader.dataset.column = j;
     colHeader.textContent = j + 1;
     gridContainer.appendChild(colHeader);
   }
@@ -21,6 +22,7 @@ const createGrid = () => {
     // Create row headers (years)
     const rowHeader = document.createElement('div');
     rowHeader.classList.add('grid-header', 'row-header');
+    rowHeader.dataset.row = i;
     rowHeader.textContent = i + 1;
     gridContainer.appendChild(rowHeader);
     
@@ -30,8 +32,82 @@ const createGrid = () => {
       gridItem.classList.add('grid-item');
       gridItem.dataset.year = i;
       gridItem.dataset.week = j;
+      gridItem.dataset.row = i;
+      gridItem.dataset.column = j;
       gridContainer.appendChild(gridItem);
     }
+  }
+  
+  // Add hover event listeners for excel-like highlighting
+  addCrossHighlightEvents();
+};
+
+// Add event listeners for cross-highlight effect
+const addCrossHighlightEvents = () => {
+  const gridContainer = document.querySelector('.grid-container');
+  const allGridItems = document.querySelectorAll('.grid-container .grid-item');
+  const rowHeaders = document.querySelectorAll('.grid-container .row-header');
+  const colHeaders = document.querySelectorAll('.grid-container .col-header');
+  
+  // Function to highlight a row and column
+  const highlightCrossSection = (row, column) => {
+    // Highlight column items
+    const columnItems = document.querySelectorAll(`.grid-container [data-column="${column}"]`);
+    for (const item of columnItems) {
+      item.classList.add('col-hover');
+    }
+    
+    // Highlight row items
+    const rowItems = document.querySelectorAll(`.grid-container [data-row="${row}"]`);
+    for (const item of rowItems) {
+      item.classList.add('row-hover');
+    }
+  };
+  
+  // Function to remove all highlights
+  const removeAllHighlights = () => {
+    const highlightedItems = document.querySelectorAll('.col-hover, .row-hover');
+    for (const item of highlightedItems) {
+      item.classList.remove('col-hover');
+      item.classList.remove('row-hover');
+    }
+  };
+  
+  // Add mouse enter event to all grid items
+  for (const item of allGridItems) {
+    item.addEventListener('mouseenter', () => {
+      const row = item.dataset.row;
+      const column = item.dataset.column;
+      highlightCrossSection(row, column);
+    });
+    
+    item.addEventListener('mouseleave', removeAllHighlights);
+  }
+  
+  // Add hover effect for row headers too
+  for (const header of rowHeaders) {
+    header.addEventListener('mouseenter', () => {
+      const row = header.dataset.row;
+      const rowItems = document.querySelectorAll(`.grid-container [data-row="${row}"]`);
+      for (const item of rowItems) {
+        item.classList.add('row-hover');
+      }
+    });
+    
+    header.addEventListener('mouseleave', removeAllHighlights);
+  }
+  
+  // Add hover effect for column headers too
+  for (const header of colHeaders) {
+    header.addEventListener('mouseenter', () => {
+      const column = header.dataset.column;
+      const columnItems = document.querySelectorAll(`.grid-container [data-column="${column}"]`);
+      for (const item of columnItems) {
+        item.classList.add('col-hover');
+      }
+    });
+    
+    header.addEventListener('mouseleave', removeAllHighlights);
   }
 };
 
@@ -139,9 +215,9 @@ const handlePrint = () => {
     
     // Ensure all grid items are visible
     const gridItems = document.querySelectorAll('.grid-container .grid-item, .grid-container .grid-header');
-    gridItems.forEach(item => {
+    for (const item of gridItems) {
       item.setAttribute('style', item.getAttribute('style') || '' + '; visibility: visible !important; display: block !important;');
-    });
+    }
   }
   
   // Add a slight delay before printing to ensure styles are applied
@@ -159,11 +235,11 @@ const handlePrint = () => {
       
       // Restore grid items
       const gridItems = document.querySelectorAll('.grid-container .grid-item, .grid-container .grid-header');
-      gridItems.forEach(item => {
+      for (const item of gridItems) {
         // Only remove the visibility and display styles we added
         const style = item.getAttribute('style') || '';
         item.setAttribute('style', style.replace(/visibility:[^;]+!important;?|display:[^;]+!important;?/g, ''));
-      });
+      }
     }
   }, 100);
 };

@@ -5,6 +5,7 @@
   --gray: #a9aab1;
   --beige: #fdf5e6;
   --current-week: #ff6b6b; /* New vibrant color for current week */
+  --hover-highlight: rgba(93, 156, 198, 0.3); /* Semi-transparent blue for hover highlights */
 }
 
 *,
@@ -65,7 +66,7 @@ h2 {
   width: 100%;
   max-width: 1060px;
   margin: 1rem auto;
-  position: relative;
+  position: relative; /* Ensure relative positioning for hover effects */
 }
 
 .grid-item {
@@ -75,6 +76,11 @@ h2 {
   height: 1rem;
   width: 1rem;
   transition: background-color .5s ease-in;
+}
+
+.grid-item:hover {
+  z-index: 1;
+  box-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
 }
 
 .grid-header {
@@ -87,7 +93,6 @@ h2 {
 }
 
 .col-header {
-  transform: rotate(-90deg);
   height: 2rem;
   width: 1rem;
 }
@@ -101,6 +106,19 @@ h2 {
 .corner-header {
   grid-column: 1;
   grid-row: 1;
+}
+
+.col-hover {
+  background-color: var(--hover-highlight) !important;
+}
+
+.row-hover {
+  background-color: var(--hover-highlight) !important;
+}
+
+.col-header.col-hover, .row-header.row-hover {
+  font-weight: bolder;
+  color: #000;
 }
 
 .year-input {
@@ -196,7 +214,8 @@ div.flex-wrap { flex-wrap: nowrap; }
   
   /* Hide only specific elements */
   .text-container,
-  button,
+  .year-input button,
+  .print-btn,
   a {
     display: none !important;
   }
