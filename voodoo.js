@@ -18,7 +18,8 @@ const createGrid = () => {
     gridContainer.appendChild(colHeader);
   }
   
-  for (let i = 0; i < 90; i++) {
+  // Only show first 40 years (hide years 41-90)
+  for (let i = 0; i < 40; i++) {
     // Create row headers (years)
     const rowHeader = document.createElement('div');
     rowHeader.classList.add('grid-header', 'row-header');
@@ -120,11 +121,8 @@ const weeksSinceBirth = (birthYear) => {
   // Someone born in 2000 is (2025 - 2000) = 25 years old in 2025
   const age = currentYear - birthYear;
   
-  // Get the current week of the current year (0-based)
-  const start = new Date(currentYear, 0, 1);
-  const diff = now - start;
-  const oneWeek = 7 * 24 * 60 * 60 * 1000;
-  const currentWeekOfYear = Math.floor(diff / oneWeek);
+  // Get the current week of the current year using our improved calculation
+  const currentWeekOfYear = getCurrentWeek();
   
   // Calculate the total weeks: complete years * 52 + current week in the current year
   const totalWeeks = (age * 52) + currentWeekOfYear;
@@ -132,13 +130,15 @@ const weeksSinceBirth = (birthYear) => {
   return totalWeeks;
 };
 
-// Get the current week number (0-51)
+// Get the current week number (0-51) - ISO 8601 format
+// Using Temporal API for accurate ISO 8601 week calculation
 const getCurrentWeek = () => {
-  const now = new Date();
-  const start = new Date(now.getFullYear(), 0, 1);
-  const diff = now - start;
-  const oneWeek = 7 * 24 * 60 * 60 * 1000;
-  return Math.floor(diff / oneWeek);
+  // Get current date using Temporal API
+  const now = Temporal.Now.plainDateISO();
+  
+  // Temporal API's weekOfYear returns 1-based ISO week number
+  // Convert to 0-based for consistency with the rest of the application
+  return now.weekOfYear - 1;
 };
 
 // Fill the grid based on birth year
